@@ -35,6 +35,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: "Table Hunter - ${{ github.ref_name }}"
           body: "可供开发人员模式下加载的 Edge 扩展包"
-          files: dist/table-hunter.crx
+          files: |
+            dist/table-hunter.crx
+            dist/table-hunter.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
