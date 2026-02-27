@@ -17,7 +17,7 @@ jobs:
         run: |
           mkdir -p dist
           cd src
-          zip -r ../dist/extension.zip . \
+          zip -r ../dist/table-hunter.zip . \
             -x "*.git*" "node_modules/*" "test/*"
 
       - name: Install crx3 npm tool
@@ -27,14 +27,14 @@ jobs:
         run: echo "${{ secrets.CRX_PRIVATE_KEY }}" > crx-private-key.pem
 
       - name: Generate CRX
-        run: crx3 pack src --key-path crx-private-key.pem --out dist/extension.crx
+        run: crx3 pack src --key-path crx-private-key.pem --out dist/table-hunter.crx
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: "发布扩展包 ${{ github.ref_name }}"
-          body: "自动发布 Edge 扩展包"
-          files: dist/extension.zip
+          name: "Table Hunter - ${{ github.ref_name }}"
+          body: "可供开发人员模式下加载的 Edge 扩展包"
+          files: dist/table-hunter.crx
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
