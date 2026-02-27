@@ -37,4 +37,4 @@ jobs:
           body: "自动发布 Edge 扩展包"
           files: dist/extension.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
