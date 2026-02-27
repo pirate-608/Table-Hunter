@@ -1,0 +1,26 @@
+<div class="selector-group">
+    <div class="selector-label">
+        <span>📋 选择表格</span>
+    </div>
+    <select class="table-select" id="tableSelect">
+        <!-- 动态插入option -->
+    </select>
+</div>
+<div id="previewSection" class="preview-section"></div>
+<div class="format-section" id="formatSection">
+    <button class="format-btn active" data-format="csv">📄 CSV</button>
+    <button class="format-btn" data-format="json">🔧 JSON</button>
+    <button class="format-btn" data-format="markdown">📝 MD</button>
+    <button class="format-btn" data-format="html">🌐 HTML</button>
+    <button class="format-btn excel" data-format="excel">📊 Excel格式</button>
+</div>
+<input type="text" class="filename-input" id="filenameInput" placeholder="输入文件名" value="exported_table">
+<div class="action-buttons">
+    <button class="primary-btn" id="exportBtn">⬇️ 导出文件</button>
+    <button class="secondary-btn" id="copyBtn">📋 复制</button>
+</div>
+<div class="action-buttons">
+    <button class="secondary-btn" id="previewBtn">👁️ 预览数据</button>
+    <button class="secondary-btn" id="statsBtn">📊 统计信息</button>
+</div>
+<div class="status-message" id="statusMessage">选择表格开始导出</div>

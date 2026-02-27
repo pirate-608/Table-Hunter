@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "表格导出工具",
+  "version": "1.0.0",
+  "description": "一键提取网页表格，支持CSV/JSON/Markdown/HTML/Excel格式",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "downloads"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}

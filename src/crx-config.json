@@ -1,0 +1,5 @@
+{
+    "manifest_path": "src/manifest.json",
+    "output": "dist/extension.crx",
+    "private_key": "${{ secrets.CRX_PRIVATE_KEY }}"
+}
