@@ -20,11 +20,14 @@ jobs:
           zip -r ../dist/extension.zip . \
             -x "*.git*" "node_modules/*" "test/*"
 
-      - name: Install crx npm tool
-        run: npm install -g crx
+      - name: Install crx3 npm tool
+        run: npm install -g crx3
+
+      - name: Write CRX private key to file
+        run: echo "${{ secrets.CRX_PRIVATE_KEY }}" > crx-private-key.pem
 
       - name: Generate CRX
-        run: crx pack -o dist/extension.crx src/manifest.json -k ${{ secrets.CRX_PRIVATE_KEY }}
+        run: crx3 pack src --key-path crx-private-key.pem --out dist/extension.crx
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
