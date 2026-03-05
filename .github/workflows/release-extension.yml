@@ -12,7 +12,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -23,12 +23,13 @@ jobs:
           cd src
           zip -r ../dist/table-hunter.zip . \
             -x "*.git*" "node_modules/*" "test/*"
-          
+
           # Verify zip was created
           if [ ! -f ../dist/table-hunter.zip ]; then
             echo "::error::Failed to create zip package"
             exit 1
           fi
+
           echo "✓ Created table-hunter.zip ($(du -h ../dist/table-hunter.zip | cut -f1))"
 
       - name: Install crx3 npm tool
@@ -37,8 +38,8 @@ jobs:
       - name: Write CRX private key to file
         run: |
           cat > crx-private-key.pem <<EOF
-${{ secrets.CRX_PRIVATE_KEY }}
-EOF
+          ${{ secrets.CRX_PRIVATE_KEY }}
+          EOF
           chmod 600 crx-private-key.pem
           ls -l crx-private-key.pem
           cat crx-private-key.pem
@@ -46,12 +47,13 @@ EOF
       - name: Generate CRX
         run: |
           crx3 pack src --key-path crx-private-key.pem --out dist/table-hunter.crx
-          
+
           # Verify CRX was created
           if [ ! -f dist/table-hunter.crx ]; then
             echo "::error::Failed to create CRX package"
             exit 1
           fi
+
           echo "✓ Created table-hunter.crx ($(du -h dist/table-hunter.crx | cut -f1))"
 
       - name: Cleanup private key
@@ -67,21 +69,18 @@ EOF
           name: "Table Hunter - ${{ github.ref_name }}"
           body: |
             ## Table Hunter Extension Release
-            
             可供开发人员模式下加载的 Edge 扩展包
-            
+
             ### Files
             - `table-hunter.crx` - CRX extension package
             - `table-hunter.zip` - ZIP extension package
-            
+
             ### Installation
             1. Download the extension package
             2. Open Edge and navigate to `edge://extensions/`
             3. Enable "Developer mode"
             4. Click "Load unpacked" and select the extracted folder
-            files: |
-              dist/table-hunter.crx
-              dist/table-hunter.zip
+          files: dist/table-hunter.crx,dist/table-hunter.zip
           fail_on_unmatched_files: true
           generate_release_notes: true
         env:
