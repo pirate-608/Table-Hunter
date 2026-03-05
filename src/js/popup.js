@@ -52,17 +52,17 @@ async function loadTemplate(path) {
 
 // 显示加载状态
 async function showLoading() {
-  mainContent.innerHTML = await loadTemplate('html/templates/loading.html');
+  mainContent.innerHTML = await loadTemplate('templates/loading.html');
 }
 
 // 显示空状态
 async function showEmptyState() {
-  mainContent.innerHTML = await loadTemplate('html/templates/empty.html');
+  mainContent.innerHTML = await loadTemplate('templates/empty.html');
 }
 
 // 显示错误
 async function showError(message) {
-  let tpl = await loadTemplate('html/templates/error.html');
+  let tpl = await loadTemplate('templates/error.html');
   tpl = tpl.replace('{{message}}', message);
   mainContent.innerHTML = tpl;
 }
@@ -138,7 +138,7 @@ async function exportTable(action) {
 
 // 渲染表格选择器
 async function renderSelector() {
-  let tpl = await loadTemplate('html/templates/selector.html');
+  let tpl = await loadTemplate('templates/selector.html');
   // 动态插入option
   const options = tables.map(t => `\n<option value="${t.index}">${t.name} (${t.rows}行 × ${t.cols}列)</option>`).join('');
   tpl = tpl.replace('<!-- 动态插入option -->', options);
@@ -203,7 +203,7 @@ function selectTable(index) {
 
 // 渲染预览
 async function renderPreview(table) {
-  let tpl = await loadTemplate('html/templates/preview.html');
+  let tpl = await loadTemplate('templates/preview.html');
   const stats = `${table.rows}行 × ${table.cols}列${table.hasThead ? ' | 含表头' : ''}`;
   tpl = tpl.replace('{{stats}}', stats);
   let previewRows = '';
@@ -245,7 +245,7 @@ async function previewData() {
       return;
     }
     // 加载新窗口模板
-    let tpl = await loadTemplate('html/templates/preview-window.html');
+    let tpl = await loadTemplate('templates/preview-window.html');
     tpl = tpl.replace(/{{format}}/g, format.toUpperCase());
     tpl = tpl.replace('{{stats}}', `${tables[selectedTableIndex].rows}行 × ${tables[selectedTableIndex].cols}列`);
     tpl = tpl.replace('{{data}}', result.data.replace(/</g, '&lt;'));
