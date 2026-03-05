@@ -40,11 +40,10 @@ jobs:
           echo "${{ secrets.CRX_PRIVATE_KEY }}" > crx-private-key.pem
           chmod 600 crx-private-key.pem
           ls -l crx-private-key.pem
-          cat crx-private-key.pem
 
       - name: Generate CRX
         run: |
-          crx3 pack src --key-path crx-private-key.pem --out dist/table-hunter.crx
+          crx3 src --keyPath crx-private-key.pem --crxPath dist/table-hunter.crx
 
           # Verify CRX was created
           if [ ! -f dist/table-hunter.crx ]; then
