@@ -37,8 +37,8 @@ jobs:
       - name: Write CRX private key to file
         run: |
           cat > crx-private-key.pem <<EOF
-          ${{ secrets.CRX_PRIVATE_KEY }}
-          EOF
+${{ secrets.CRX_PRIVATE_KEY }}
+EOF
           chmod 600 crx-private-key.pem
           ls -l crx-private-key.pem
           cat crx-private-key.pem
