@@ -215,37 +215,41 @@ function toExcel(table) {
 </html>`;
 }
 
-// 高亮表格
+// 高亮表格：直接在表格元素上添加样式，避免定位偏移问题
+let _highlightedTable = null;
+
 function highlightTable(tableIndex) {
   unhighlightTable();
   const tables = document.querySelectorAll('table');
   const table = tables[tableIndex];
   if (!table) return;
 
-  const overlay = document.createElement('div');
-  overlay.id = '__table_hunter_highlight__';
-  const rect = table.getBoundingClientRect();
-  Object.assign(overlay.style, {
-    position: 'absolute',
-    top: (window.scrollY + rect.top - 4) + 'px',
-    left: (window.scrollX + rect.left - 4) + 'px',
-    width: (rect.width + 8) + 'px',
-    height: (rect.height + 8) + 'px',
-    border: '3px solid #2563eb',
-    borderRadius: '6px',
-    backgroundColor: 'rgba(37, 99, 235, 0.08)',
-    pointerEvents: 'none',
-    zIndex: '2147483647',
-    transition: 'opacity 0.2s'
-  });
-  document.body.appendChild(overlay);
+  _highlightedTable = table;
+  table.dataset.thOldOutline = table.style.outline || '';
+  table.dataset.thOldBoxShadow = table.style.boxShadow || '';
+  table.style.outline = '3px solid #2563eb';
+  table.style.outlineOffset = '3px';
+  table.style.boxShadow = '0 0 0 6px rgba(37, 99, 235, 0.15)';
   table.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // 取消高亮
 function unhighlightTable() {
-  const existing = document.getElementById('__table_hunter_highlight__');
-  if (existing) existing.remove();
+  if (!_highlightedTable) return;
+  _highlightedTable.style.outline = _highlightedTable.dataset.thOldOutline || '';
+  _highlightedTable.style.boxShadow = _highlightedTable.dataset.thOldBoxShadow || '';
+  delete _highlightedTable.dataset.thOldOutline;
+  delete _highlightedTable.dataset.thOldBoxShadow;
+  _highlightedTable = null;
 }
+
+// 监听端口连接，popup关闭时自动取消高亮
+chrome.runtime.onConnect.addListener(port => {
+  if (port.name === 'table-hunter-highlight') {
+    port.onDisconnect.addListener(() => {
+      unhighlightTable();
+    });
+  }
+});
 
 console.log('✅ 表格导出工具内容脚本已加载');

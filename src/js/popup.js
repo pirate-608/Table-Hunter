@@ -13,13 +13,14 @@ const refreshBtn = document.getElementById('refreshBtn');
 // 初始化
 document.addEventListener('DOMContentLoaded', loadTables);
 
-// popup关闭时取消高亮
-window.addEventListener('unload', async () => {
+// 建立端口连接，popup关闭时端口自动断开，content script侧监听断开事件清除高亮
+async function connectHighlightPort() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    chrome.tabs.sendMessage(tab.id, { action: 'unhighlightTable' });
+    chrome.tabs.connect(tab.id, { name: 'table-hunter-highlight' });
   } catch (e) { }
-});
+}
+connectHighlightPort();
 
 // 刷新按钮
 refreshBtn.addEventListener('click', loadTables);
