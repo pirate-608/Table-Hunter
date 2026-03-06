@@ -13,6 +13,14 @@ const refreshBtn = document.getElementById('refreshBtn');
 // 初始化
 document.addEventListener('DOMContentLoaded', loadTables);
 
+// popup关闭时取消高亮
+window.addEventListener('unload', async () => {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.tabs.sendMessage(tab.id, { action: 'unhighlightTable' });
+  } catch (e) { }
+});
+
 // 刷新按钮
 refreshBtn.addEventListener('click', loadTables);
 
@@ -22,6 +30,12 @@ async function loadTables() {
 
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+    // 确保content script已注入
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['js/content.js']
+    });
 
     // 向content.js发送消息
     const response = await chrome.tabs.sendMessage(tab.id, { action: 'detectTables' });
@@ -192,13 +206,19 @@ async function renderSelector() {
 }
 
 // 选择表格
-function selectTable(index) {
+async function selectTable(index) {
   selectedTableIndex = index;
   const table = tables[index];
   if (!table) return;
 
   renderPreview(table);
   updateStatus(`已选择: ${table.name} (${table.rows}行 × ${table.cols}列)`);
+
+  // 高亮页面上对应的表格
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.tabs.sendMessage(tab.id, { action: 'highlightTable', tableIndex: index });
+  } catch (e) { }
 }
 
 // 渲染预览
